@@ -1,16 +1,16 @@
 import React from 'react';
 
-const BookRide = () => {
+const Contact = () => {
   return (
     <div className="text-center">
       <h1 className="text-4xl font-bold text-blue-900 mb-4">
-        Book Your Ride
+        Contact Us
       </h1>
       <p className="text-lg text-gray-700">
-        Choose your destination and let us handle the rest!
+        Have questions? Reach out and we’ll be happy to assist!
       </p>
     </div>
   );
 };
 
-export default BookRide;
+export default Contact;
