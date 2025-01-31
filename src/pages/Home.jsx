@@ -104,7 +104,7 @@ const Home = () => {
         {/* Download Our App */}
         <section className="text-center">
           <h2 className="text-3xl font-bold mb-4">Download Our App</h2>
-          <p className="text-lg mb-8 max-w-3xl mx-auto">Get Uber Motorbike on your mobile and enjoy seamless ride booking at your fingertips.</p>
+          <p className="text-lg mb-8 max-w-3xl mx-auto">Get Uber on your mobile and enjoy seamless ride booking at your fingertips.</p>
           <div className="flex justify-center gap-6">
             <button className="px-8 py-3 bg-blue-900 text-white rounded-full flex items-center gap-2 hover:bg-blue-800 transition">
               <FaApple className="text-xl" /> Download on the App Store
