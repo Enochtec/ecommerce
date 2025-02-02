@@ -102,7 +102,7 @@ const Contact = () => {
           <h3 className="text-xl font-semibold text-blue-900">Phone Support</h3>
           <p className="text-gray-700">If you need immediate help, give us a call at:</p>
           <ul className="list-disc pl-6 text-gray-700">
-            <li>Customer Support: <a href="tel:+1234567890" className="text-blue-500">(123) 456-7890</a></li>
+            <li>Customer Support: <a href="tel:+1234567890" className="text-blue-500">(254) 792397476</a></li>
             <li>Sales: <a href="tel:+0987654321" className="text-blue-500">(987) 654-3210</a></li>
             <li>Emergency: <a href="tel:+18001234567" className="text-blue-500">(800) 123-4567</a></li>
           </ul>
