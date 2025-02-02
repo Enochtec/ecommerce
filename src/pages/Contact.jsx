@@ -90,7 +90,7 @@ const Contact = () => {
 
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-blue-900">Customer Support</h3>
-          <p className="text-gray-700">For inquiries or assistance, reach out to us at: <a href="mailto:support@ubermotorbike.com" className="text-blue-500">support@ubermotorbike.com</a></p>
+          <p className="text-gray-700">For inquiries or assistance, reach out to us at: <a href="mailto:support@ubermotorbike.com" className="text-blue-500">support@ridexpress.com</a></p>
         </div>
 
         <div className="mb-6">
