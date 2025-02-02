@@ -85,7 +85,7 @@ const Contact = () => {
 
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-blue-900">Our Office Location</h3>
-          <p className="text-gray-700">We’re located at 123 Uber Road, CityCenter, State, 12345. Visit us or send us a letter for further communication.</p>
+          <p className="text-gray-700">We’re located at Eastern Bypass, CityCenter, State. Visit us or send us a letter for further communication.</p>
         </div>
 
         <div className="mb-6">
@@ -95,7 +95,7 @@ const Contact = () => {
 
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-blue-900">Sales & Bookings</h3>
-          <p className="text-gray-700">For ride bookings and special offers, email us at: <a href="mailto:bookings@ubermotorbike.com" className="text-blue-500">bookings@ubermotorbike.com</a></p>
+          <p className="text-gray-700">For ride bookings and special offers, email us at: <a href="mailto:bookings@ubermotorbike.com" className="text-blue-500">bookings@ridexpresw.com</a></p>
         </div>
 
         <div className="mb-6">
