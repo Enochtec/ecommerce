@@ -1,20 +1,27 @@
-import React, { useState } from 'react';
-import MapSection from './MapSection';
+import React, { useState, lazy, Suspense } from "react";
+
+const MapSection = lazy(() => import("./MapSection"));
 
 const BookRide = () => {
-  const [destination, setDestination] = useState('');
-  const [rideType, setRideType] = useState('Standard Ride');
-  const [pickupLocation, setPickupLocation] = useState('');
-  const [error, setError] = useState('');
+  const [destination, setDestination] = useState("");
+  const [rideType, setRideType] = useState("Standard Ride");
+  const [pickupLocation, setPickupLocation] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!destination || !pickupLocation) {
-      setError('Please fill in all fields.');
+    if (!destination.trim() || !pickupLocation.trim()) {
+      setError("Please fill in both fields.");
       return;
     }
-    setError('');
-    alert(`Your ride to ${destination} has been booked!`);
+    setError("");
+    setLoading(true);
+
+    setTimeout(() => {
+      alert(`🚖 Your ${rideType} to ${destination} has been booked!`);
+      setLoading(false);
+    }, 2000);
   };
 
   return (
@@ -24,7 +31,7 @@ const BookRide = () => {
         Choose your destination, pickup location, and ride type, and we’ll handle the rest!
       </p>
 
-      {/* Ride booking form */}
+      {/* Ride Booking Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Destination Input */}
         <div className="flex flex-col space-y-2">
@@ -35,8 +42,7 @@ const BookRide = () => {
             placeholder="Enter your destination"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
-            className="p-3 border border-gray-300 rounded-md text-gray-800"
-            required
+            className="p-3 border border-gray-300 rounded-md text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition"
           />
         </div>
 
@@ -49,8 +55,7 @@ const BookRide = () => {
             placeholder="Enter your pickup location"
             value={pickupLocation}
             onChange={(e) => setPickupLocation(e.target.value)}
-            className="p-3 border border-gray-300 rounded-md text-gray-800"
-            required
+            className="p-3 border border-gray-300 rounded-md text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition"
           />
         </div>
 
@@ -61,11 +66,11 @@ const BookRide = () => {
             id="ride-type"
             value={rideType}
             onChange={(e) => setRideType(e.target.value)}
-            className="p-3 border border-gray-300 rounded-md text-gray-800"
+            className="p-3 border border-gray-300 rounded-md text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 transition"
           >
             <option value="Standard Ride">Standard Ride</option>
             <option value="Premium Ride">Premium Ride</option>
-            <option value="group-ride">Group Ride</option>
+            <option value="Group Ride">Group Ride</option>
             <option value="Eco Ride">Eco Ride</option>
           </select>
         </div>
@@ -76,14 +81,21 @@ const BookRide = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-yellow-400 text-blue-900 py-3 rounded-full hover:bg-yellow-300 transition duration-300"
+          disabled={loading}
+          className={`w-full py-3 rounded-full transition duration-300 ${
+            loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-yellow-400 text-blue-900 hover:bg-yellow-300"
+          }`}
         >
-          Book Now
+          {loading ? "Booking..." : "Book Now"}
         </button>
       </form>
 
-      {/* Map Section */}
-      <MapSection />
+      {/* Map Section (Lazy Loaded) */}
+      <Suspense fallback={<p className="text-center mt-6">Loading map...</p>}>
+        <MapSection />
+      </Suspense>
     </div>
   );
 };

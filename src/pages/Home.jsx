@@ -1,11 +1,13 @@
 import React from 'react';
-import Footer from '../components/Footer';
+import { Helmet } from "react-helmet-async";
 import { Link } from 'react-router-dom';
 import { FaMotorcycle, FaCarSide, FaUsers, FaLeaf, FaClock, FaDollarSign, FaGlobe, FaApple, FaGooglePlay } from 'react-icons/fa';
 
 const Home = () => {
   return (
     <>
+    
+
     
       {/* Hero Section */}
       <header className="bg-blue-900 text-white py-20 text-center mt-16"> {/* Add mt-16 */}

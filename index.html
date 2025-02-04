@@ -5,9 +5,28 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Uber</title>
+    <link rel="preload" href="/images/ride.webp" as="image" />
+
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
+  <script type="application/ld+json">
+    {`
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Ride Booking",
+        "url": "https://ridexpress.vercel.app",
+        "logo": "https://ridexpress.vercel.app/images/logo.png",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+254792397476",
+          "contactType": "customer service"
+        }
+      }
+    `}
+  </script>
+    
 </html>
