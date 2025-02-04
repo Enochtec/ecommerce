@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
           {/* Uber logo and help center */}
           <div>
-            <h1 className="text-xl font-bold">Uber</h1>
+            <h1 className="text-xl font-bold">RideXpress</h1>
             <p className="mt-2 text-sm">Visit Help Center</p>
           </div>
 
@@ -32,8 +32,8 @@ const Footer = () => {
               <li>Drive</li>
               <li>Deliver</li>
               <li>Eat</li>
-              <li>Uber for Business</li>
-              <li>Uber Freight</li>
+              <li>RideXpress for Business</li>
+              <li>RideXpress Freight</li>
               <li>Gift cards</li>
             </ul>
           </div>
@@ -77,7 +77,7 @@ const Footer = () => {
 
         {/* Footer bottom */}
         <div className="mt-8 flex flex-col md:flex-row md:justify-between items-center text-gray-400 text-sm">
-          <p>© 2025 Uber Technologies Inc.</p>
+          <p>© 2025 RideXpress Technologies Inc.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <p>Privacy</p>
             <p>Accessibility</p>

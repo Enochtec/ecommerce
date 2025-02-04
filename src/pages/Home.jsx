@@ -11,7 +11,7 @@ const Home = () => {
       <header className="bg-blue-900 text-white py-20 text-center mt-16"> {/* Add mt-16 */}
 
         <div className="container mx-auto px-6">
-          <h1 className="text-5xl font-bold mb-4 animate-fade-in">Welcome to Uber Motorbike</h1>
+          <h1 className="text-5xl font-bold mb-4 animate-fade-in">Welcome to RideXpress</h1>
           <p className="text-lg mb-6 max-w-2xl mx-auto animate-fade-in-delay">Your trusted motorbike service. Fast, reliable, and affordable rides, wherever you are.</p>
           <button className="px-8 py-3 bg-yellow-500 text-blue-900 rounded-full hover:bg-yellow-400 transition animate-bounce">
   <Link to="/book-ride">Book a Ride</Link>
@@ -108,7 +108,7 @@ const Home = () => {
         {/* Download Our App */}
         <section className="text-center">
           <h2 className="text-3xl font-bold mb-4">Download Our App</h2>
-          <p className="text-lg mb-8 max-w-3xl mx-auto">Get Uber Motorbike on your mobile and enjoy seamless ride booking at your fingertips.</p>
+          <p className="text-lg mb-8 max-w-3xl mx-auto">Get RideXpress on your mobile and enjoy seamless ride booking at your fingertips.</p>
           <div className="flex justify-center gap-6">
             <button className="px-8 py-3 bg-blue-900 text-white rounded-full flex items-center gap-2 hover:bg-blue-800 transition">
               <FaApple className="text-xl" /> Download on the App Store

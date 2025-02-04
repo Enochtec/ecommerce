@@ -85,24 +85,24 @@ const Contact = () => {
 
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-blue-900">Our Office Location</h3>
-          <p className="text-gray-700">We’re located at 123 Uber Road, CityCenter, State, 12345. Visit us or send us a letter for further communication.</p>
+          <p className="text-gray-700">We’re located at Eastern Bypass, CityCenter, State. Visit us or send us a letter for further communication.</p>
         </div>
 
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-blue-900">Customer Support</h3>
-          <p className="text-gray-700">For inquiries or assistance, reach out to us at: <a href="mailto:support@ubermotorbike.com" className="text-blue-500">support@ubermotorbike.com</a></p>
+          <p className="text-gray-700">For inquiries or assistance, reach out to us at: <a href="mailto:support@ubermotorbike.com" className="text-blue-500">support@ridexpress.com</a></p>
         </div>
 
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-blue-900">Sales & Bookings</h3>
-          <p className="text-gray-700">For ride bookings and special offers, email us at: <a href="mailto:bookings@ubermotorbike.com" className="text-blue-500">bookings@ubermotorbike.com</a></p>
+          <p className="text-gray-700">For ride bookings and special offers, email us at: <a href="mailto:bookings@ubermotorbike.com" className="text-blue-500">bookings@ridexpresw.com</a></p>
         </div>
 
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-blue-900">Phone Support</h3>
           <p className="text-gray-700">If you need immediate help, give us a call at:</p>
           <ul className="list-disc pl-6 text-gray-700">
-            <li>Customer Support: <a href="tel:+1234567890" className="text-blue-500">(123) 456-7890</a></li>
+            <li>Customer Support: <a href="tel:+1234567890" className="text-blue-500">(254) 792397476</a></li>
             <li>Sales: <a href="tel:+0987654321" className="text-blue-500">(987) 654-3210</a></li>
             <li>Emergency: <a href="tel:+18001234567" className="text-blue-500">(800) 123-4567</a></li>
           </ul>

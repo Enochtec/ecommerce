@@ -13,7 +13,7 @@ const Navbar = () => {
     <nav className="bg-blue-900 text-white shadow-md fixed w-full top-0 left-0 z-50 h-16 flex items-center">
       <div className="container mx-auto flex justify-between items-center px-6">
         <h1 className="text-2xl font-bold flex items-center gap-2">
-          <FaMotorcycle className="text-yellow-500" /> Uber Motorbike
+          <FaMotorcycle className="text-yellow-500" /> RideXpress
         </h1>
         <ul
           className={`${
