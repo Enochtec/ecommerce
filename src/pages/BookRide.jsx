@@ -7,7 +7,6 @@ const BookRide = () => {
   const [pickupLocation, setPickupLocation] = useState('');
   const [error, setError] = useState('');
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!destination || !pickupLocation) {
@@ -19,21 +18,12 @@ const BookRide = () => {
   };
 
   return (
-<<<<<<< HEAD
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-16">
       <h1 className="text-4xl font-bold text-blue-900 mb-6">Book Your Ride</h1>
       <p className="text-lg text-gray-700 mb-8">
         Choose your destination, pickup location, and ride type, and we’ll handle the rest!
-=======
-    <div className="text-center">
-      <h1 className="text-4xl font-bold text-blue-900 mb-4">
-        Book Your Ride
-      </h1>
-      <p className="text-lg text-gray-800">
-        Choose your destination and let us handle the rest!
->>>>>>> e5eb3ca20f0e2cd5ac9e07b7bbfb93a6d811b4c3
       </p>
-      
+
       {/* Ride booking form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Destination Input */}
@@ -75,7 +65,7 @@ const BookRide = () => {
           >
             <option value="Standard Ride">Standard Ride</option>
             <option value="Premium Ride">Premium Ride</option>
-            <option value="Group Ride">Group Ride</option>
+            <option value="group-ride">Group Ride</option>
             <option value="Eco Ride">Eco Ride</option>
           </select>
         </div>
@@ -92,8 +82,8 @@ const BookRide = () => {
         </button>
       </form>
 
-     {/* Map Section */}
-     <MapSection /> 
+      {/* Map Section */}
+      <MapSection />
     </div>
   );
 };

@@ -58,7 +58,7 @@ const Home = () => {
       <h3 className="text-2xl font-semibold mb-2">Standard Ride</h3>
       <p className="text-lg mb-4">Perfect for quick city trips, offering a reliable and affordable solution for your daily needs.</p>
       <button className="bg-yellow-400 text-blue-900 px-4 py-2 rounded-full hover:bg-yellow-300 transition duration-300">
-        Book Now
+      <Link to="/book-ride">Book a Ride</Link>
       </button>
     </div>
 
@@ -70,7 +70,7 @@ const Home = () => {
       <h3 className="text-2xl font-semibold mb-2">Premium Ride</h3>
       <p className="text-lg mb-4">Enjoy extra comfort and style, perfect for special occasions or when you want to travel in luxury.</p>
       <button className="bg-yellow-400 text-blue-900 px-4 py-2 rounded-full hover:bg-yellow-300 transition duration-300">
-        Book Now
+      <Link to="/book-ride">Book a Ride</Link>
       </button>
     </div>
 
@@ -81,9 +81,13 @@ const Home = () => {
       </div>
       <h3 className="text-2xl font-semibold mb-2">Group Ride</h3>
       <p className="text-lg mb-4">Ideal for traveling with friends or colleagues, offering a spacious and comfortable experience for groups.</p>
-      <button className="bg-yellow-400 text-blue-900 px-4 py-2 rounded-full hover:bg-yellow-300 transition duration-300">
-        Book Now
-      </button>
+      <button
+     id="group-ride"
+      className="bg-yellow-400 text-blue-900 px-4 py-2 rounded-full hover:bg-yellow-300 transition duration-300"
+>
+      <Link to="/book-ride">Book a Ride</Link>
+     </button>
+
     </div>
 
     {/* Eco Ride */}
