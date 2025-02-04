@@ -83,11 +83,7 @@ const BookRide = () => {
       </form>
 
       {/* Map Section */}
-<<<<<<< HEAD
       <MapSection />
-=======
-      <MapSection /> 
->>>>>>> 1f6d6b1d97651ccda6b90f9fc58e59b9d7f4ce7e
     </div>
   );
 };
