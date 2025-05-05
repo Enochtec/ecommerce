@@ -1,129 +1,118 @@
-import React from 'react';
-import { Helmet } from "react-helmet-async";
-import { Link } from 'react-router-dom';
-import { FaMotorcycle, FaCarSide, FaUsers, FaLeaf, FaClock, FaDollarSign, FaGlobe, FaApple, FaGooglePlay } from 'react-icons/fa';
+import { Link } from 'react-router-dom'
+import CategoryCard from '../components/CategoryCard'
 
-const Home = () => {
+export default function Home() {
+  const categories = [
+    {
+      name: 'Electronics',
+      image: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03',
+      description: 'Latest gadgets and devices',
+      link: '/products?category=electronics'
+    },
+    {
+      name: 'Clothing',
+      image: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f',
+      description: 'Trendy fashion for everyone',
+      link: '/products?category=clothing'
+    },
+    {
+      name: 'Home & Garden',
+      image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f',
+      description: 'Everything for your home',
+      link: '/products?category=home'
+    }
+  ]
+
+  const features = [
+    {
+      icon: '🚚',
+      title: 'Free Shipping',
+      description: 'On orders over $50'
+    },
+    {
+      icon: '↩️',
+      title: 'Easy Returns',
+      description: '30-day return policy'
+    },
+    {
+      icon: '🔒',
+      title: 'Secure Payment',
+      description: '100% secure checkout'
+    },
+    {
+      icon: '📞',
+      title: '24/7 Support',
+      description: 'Dedicated support'
+    }
+  ]
+
   return (
-    <>
-    
-
-    
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <header className="bg-blue-900 text-white py-20 text-center mt-16"> {/* Add mt-16 */}
-
-        <div className="container mx-auto px-6">
-          <h1 className="text-5xl font-bold mb-4 animate-fade-in">Welcome to RideXpress</h1>
-          <p className="text-lg mb-6 max-w-2xl mx-auto animate-fade-in-delay">Your trusted motorbike service. Fast, reliable, and affordable rides, wherever you are.</p>
-          <button className="px-8 py-3 bg-yellow-500 text-blue-900 rounded-full hover:bg-yellow-400 transition animate-bounce">
-  <Link to="/book-ride">Book a Ride</Link>
-</button>
+      <section className="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20 md:py-32 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-20 w-64 h-64 bg-white rounded-full mix-blend-overlay filter blur-3xl"></div>
+          <div className="absolute bottom-0 right-20 w-64 h-64 bg-green-400 rounded-full mix-blend-overlay filter blur-3xl"></div>
         </div>
-      </header>
-      
-      {/* Why Choose Us */}
-      <main className="container mx-auto py-16 px-6 mt-16">  {/* Add mt-16 here */}
+        
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            Welcome to <span className="text-green-400">ShopEasy</span>
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
+            Discover amazing products at prices you'll love
+          </p>
+          <Link 
+            to="/products" 
+            className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg"
+          >
+            Shop Now
+          </Link>
+        </div>
+      </section>
 
-        <section className="text-center mb-16">
-          <h2 className="text-3xl font-bold mb-4">Why Choose Us?</h2>
-          <p className="text-lg mb-8 max-w-3xl mx-auto">Experience top-tier motorbike services tailored to your needs. Whether you're in a rush or just need a smooth ride, we’ve got you covered.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-            <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition">
-              <FaClock className="text-blue-900 text-4xl mb-3 mx-auto" />
-              <h3 className="text-xl font-semibold mb-3">Fast & Reliable</h3>
-              <p>We prioritize your time with quick, punctual rides wherever you are.</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition">
-              <FaDollarSign className="text-green-500 text-4xl mb-3 mx-auto" />
-              <h3 className="text-xl font-semibold mb-3">Affordable Pricing</h3>
-              <p>Get the best rates without compromising on safety and comfort.</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition">
-              <FaGlobe className="text-yellow-500 text-4xl mb-3 mx-auto" />
-              <h3 className="text-xl font-semibold mb-3">24/7 Availability</h3>
-              <p>No matter the time, we're here to get you where you need to go.</p>
-            </div>
+      {/* Features Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <div key={index} className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 text-center">
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-bold mb-2 text-gray-800">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-      {/* Ride Options */}
-<section className="text-center mb-16">
-  <h2 className="text-4xl font-bold mb-6 text-yellow-400">Our Ride Options</h2>
-  <p className="text-xl mb-12 text-gray-300 max-w-xl mx-auto">Explore our wide range of ride options designed to cater to all your travel needs, whether you're looking for speed, comfort, or a group experience.</p>
-  
-  <div className="flex flex-wrap justify-center gap-8">
-    {/* Standard Ride */}
-    <div className="max-w-xs bg-blue-800 text-white rounded-lg shadow-lg p-6 hover:bg-blue-700 transition duration-300">
-      <div className="text-4xl mb-4 text-yellow-400">
-        <FaMotorcycle />
-      </div>
-      <h3 className="text-2xl font-semibold mb-2">Standard Ride</h3>
-      <p className="text-lg mb-4">Perfect for quick city trips, offering a reliable and affordable solution for your daily needs.</p>
-      <button className="bg-yellow-400 text-blue-900 px-4 py-2 rounded-full hover:bg-yellow-300 transition duration-300">
-      <Link to="/book-ride">Book a Ride</Link>
-      </button>
-    </div>
-
-    {/* Premium Ride */}
-    <div className="max-w-xs bg-blue-800 text-white rounded-lg shadow-lg p-6 hover:bg-blue-700 transition duration-300">
-      <div className="text-4xl mb-4 text-yellow-400">
-        <FaCarSide />
-      </div>
-      <h3 className="text-2xl font-semibold mb-2">Premium Ride</h3>
-      <p className="text-lg mb-4">Enjoy extra comfort and style, perfect for special occasions or when you want to travel in luxury.</p>
-      <button className="bg-yellow-400 text-blue-900 px-4 py-2 rounded-full hover:bg-yellow-300 transition duration-300">
-      <Link to="/book-ride">Book a Ride</Link>
-      </button>
-    </div>
-
-    {/* Group Ride */}
-    <div className="max-w-xs bg-blue-800 text-white rounded-lg shadow-lg p-6 hover:bg-blue-700 transition duration-300">
-      <div className="text-4xl mb-4 text-yellow-400">
-        <FaUsers />
-      </div>
-      <h3 className="text-2xl font-semibold mb-2">Group Ride</h3>
-      <p className="text-lg mb-4">Ideal for traveling with friends or colleagues, offering a spacious and comfortable experience for groups.</p>
-      <button
-     id="group-ride"
-      className="bg-yellow-400 text-blue-900 px-4 py-2 rounded-full hover:bg-yellow-300 transition duration-300"
->
-      <Link to="/book-ride">Book a Ride</Link>
-     </button>
-
-    </div>
-
-    {/* Eco Ride */}
-    <div className="max-w-xs bg-blue-800 text-white rounded-lg shadow-lg p-6 hover:bg-blue-700 transition duration-300">
-      <div className="text-4xl mb-4 text-yellow-400">
-        <FaLeaf />
-      </div>
-      <h3 className="text-2xl font-semibold mb-2">Eco Ride</h3>
-      <p className="text-lg mb-4">Travel sustainably with our eco-friendly rides, designed to reduce your carbon footprint while still offering a great experience.</p>
-      <button className="bg-yellow-400 text-blue-900 px-4 py-2 rounded-full hover:bg-yellow-300 transition duration-300">
-        Book Now
-      </button>
-    </div>
-  </div>
-</section>
-
-
-        {/* Download Our App */}
-        <section className="text-center">
-          <h2 className="text-3xl font-bold mb-4">Download Our App</h2>
-          <p className="text-lg mb-8 max-w-3xl mx-auto">Get RideXpress on your mobile and enjoy seamless ride booking at your fingertips.</p>
-          <div className="flex justify-center gap-6">
-            <button className="px-8 py-3 bg-blue-900 text-white rounded-full flex items-center gap-2 hover:bg-blue-800 transition">
-              <FaApple className="text-xl" /> Download on the App Store
-            </button>
-            <button className="px-8 py-3 bg-green-500 text-white rounded-full flex items-center gap-2 hover:bg-green-400 transition">
-              <FaGooglePlay className="text-xl" /> Get it on Google Play
-            </button>
+      {/* Categories Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">Shop by Category</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {categories.map((category, index) => (
+              <CategoryCard key={index} category={category} />
+            ))}
           </div>
-        </section>
-      </main>
-      
-    </>
-  );
-};
+        </div>
+      </section>
 
-export default Home;
+      {/* CTA Section */}
+      <section className="py-16 bg-blue-600 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-6">Ready to find your perfect product?</h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
+            Join thousands of satisfied customers who shop with us every day.
+          </p>
+          <Link 
+            to="/products" 
+            className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors"
+          >
+            Browse Products
+          </Link>
+        </div>
+      </section>
+    </div>
+  )
+}
