@@ -1,5 +1,7 @@
 import { Container, Typography, Box, Grid } from '@mui/material'
 import { useEffect, useState } from 'react'
+import CircularProgress from '@mui/material/CircularProgress';
+
 import ProductCard from '../components/ProductCard'
 import CategoryCard from '../components/CategoryCard'
 import { fetchProducts } from '../services/productService'

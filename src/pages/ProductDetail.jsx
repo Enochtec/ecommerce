@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Container, Grid, Typography, Button, Divider, Rating, Chip } from '@mui/material'
 import { ShoppingCart } from '@mui/icons-material'
-import { fetchProductById } from '../../services/productService'
+import { fetchProductById } from '../services/productService'
 import { useCart } from '../hooks/useCart'
 import { toast } from 'react-toastify'
 
