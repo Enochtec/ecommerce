@@ -7,8 +7,8 @@ import {
   IconButton
 } from '@mui/material'
 import { Favorite, Delete } from '@mui/icons-material'
-import { fetchWishlist, removeFromWishlist } from '../../../services/wishlistService'
-import ProductCard from '../../../components/ProductCard'
+// import { fetchWishlist, removeFromWishlist } from '../../../services/wishlistService'
+import ProductCard from '../../components/ProductCard'
 
 export default function Wishlist() {
   const [wishlist, setWishlist] = useState([])

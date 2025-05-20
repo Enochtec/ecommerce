@@ -14,7 +14,7 @@ import {
   CircularProgress
 } from '@mui/material'
 import { Add, Edit, Delete } from '@mui/icons-material'
-import { fetchAddresses, createAddress, updateAddress, deleteAddress } from '../../../services/addressService'
+import { fetchAddresses, createAddress, updateAddress, deleteAddress } from '../../services/addressService'
 
 export default function Addresses() {
   const [addresses, setAddresses] = useState([])

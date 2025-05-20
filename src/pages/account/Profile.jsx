@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Typography, Box, TextField, Button, CircularProgress } from '@mui/material'
-import { useAuth } from '../../../hooks/useAuth'
-import { updateProfile } from '../../../services/authService'
+import { useAuth } from '../../hooks/useAuth'
+import { updateProfile } from '../../services/authService'
 import { toast } from 'react-toastify'
 
 export default function Profile() {

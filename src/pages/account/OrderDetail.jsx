@@ -10,7 +10,7 @@ import {
   Button,
   CircularProgress
 } from '@mui/material'
-import { fetchOrderById } from '../../../services/orderService'
+import { fetchOrderById } from '../../services/orderService'
 import { format } from 'date-fns'
 
 export default function OrderDetail() {

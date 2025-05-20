@@ -13,7 +13,7 @@ import {
   CircularProgress
 } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { fetchUserOrders } from '../../../services/orderService'
+import { fetchUserOrders } from '../../services/orderService'
 import { format } from 'date-fns'
 
 export default function Orders() {

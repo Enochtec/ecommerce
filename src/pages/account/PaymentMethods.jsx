@@ -15,7 +15,7 @@ import {
   IconButton
 } from '@mui/material'
 import { Add, Edit, Delete, CreditCard } from '@mui/icons-material'
-import { fetchPaymentMethods, createPaymentMethod, deletePaymentMethod } from '../../../services/paymentService';
+import { fetchPaymentMethods, createPaymentMethod, deletePaymentMethod } from "@/services/paymentService";
 
 export default function PaymentMethods() {
   const [paymentMethods, setPaymentMethods] = useState([])
