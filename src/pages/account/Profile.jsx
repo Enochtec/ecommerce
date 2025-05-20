@@ -1,81 +1,133 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Typography, Box, TextField, Button, CircularProgress } from '@mui/material'
+import { useAuth } from '../../../hooks/useAuth'
+import { updateProfile } from '../../../services/authService'
+import { toast } from 'react-toastify'
 
-export default function Profile({ user }) {
+export default function Profile() {
+  const { user, updateUser } = useAuth()
   const [formData, setFormData] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    phone: '',
+    username: '',
+    email: '',
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
   })
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        username: user.username || '',
+        email: user.email || '',
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      })
+    }
+  }, [user])
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Update profile logic here
+    setIsLoading(true)
+
+    try {
+      const updatedUser = await updateProfile({
+        username: formData.username,
+        email: formData.email,
+        ...(formData.newPassword && {
+          currentPassword: formData.currentPassword,
+          newPassword: formData.newPassword
+        })
+      })
+      updateUser(updatedUser)
+      toast.success('Profile updated successfully!')
+    } catch (error) {
+      toast.error(error.message)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <div>
-      <h2 className="text-xl font-bold text-gray-900 mb-6">Profile Information</h2>
+    <Box>
+      <Typography variant="h5" gutterBottom>
+        My Profile
+      </Typography>
       
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-            Full Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
+      <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 600, mt: 3 }}>
+        <TextField
+          label="Username"
+          name="username"
+          fullWidth
+          margin="normal"
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
         
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email Address
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-            disabled
-          />
-        </div>
+        <TextField
+          label="Email"
+          type="email"
+          name="email"
+          fullWidth
+          margin="normal"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
         
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-            Phone Number
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
+        <Typography variant="h6" sx={{ mt: 3, mb: 2 }}>
+          Change Password
+        </Typography>
         
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Save Changes
-          </button>
-        </div>
-      </form>
-    </div>
+        <TextField
+          label="Current Password"
+          type="password"
+          name="currentPassword"
+          fullWidth
+          margin="normal"
+          value={formData.currentPassword}
+          onChange={handleChange}
+        />
+        
+        <TextField
+          label="New Password"
+          type="password"
+          name="newPassword"
+          fullWidth
+          margin="normal"
+          value={formData.newPassword}
+          onChange={handleChange}
+        />
+        
+        <TextField
+          label="Confirm New Password"
+          type="password"
+          name="confirmPassword"
+          fullWidth
+          margin="normal"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+        />
+        
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{ mt: 3 }}
+          disabled={isLoading}
+          startIcon={isLoading ? <CircularProgress size={20} /> : null}
+        >
+          Update Profile
+        </Button>
+      </Box>
+    </Box>
   )
 }

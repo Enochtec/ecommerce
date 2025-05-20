@@ -1,21 +1,21 @@
-import * as React from "react"
-import { cn } from "../../lib/utils"
+import { Card as MuiCard } from '@mui/material'
 
-const Card = React.forwardRef(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
-      className
-    )}
-    {...props}
-  />
-))
-Card.displayName = "Card"
-
-const CardContent = React.forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-))
-CardContent.displayName = "CardContent"
-
-export { Card, CardContent }
+export default function Card({ children, ...props }) {
+  return (
+    <MuiCard
+      {...props}
+      sx={{
+        borderRadius: 2,
+        boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+        transition: 'transform 0.3s, box-shadow 0.3s',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.15)'
+        },
+        ...props.sx
+      }}
+    >
+      {children}
+    </MuiCard>
+  )
+}

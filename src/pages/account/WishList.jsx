@@ -1,56 +1,80 @@
-import { Link } from 'react-router-dom'
-import { Heart, ShoppingCart } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { 
+  Typography, 
+  Box, 
+  Grid,
+  CircularProgress,
+  IconButton
+} from '@mui/material'
+import { Favorite, Delete } from '@mui/icons-material'
+import { fetchWishlist, removeFromWishlist } from '../../../services/wishlistService'
+import ProductCard from '../../../components/ProductCard'
 
 export default function Wishlist() {
-  // Sample wishlist data - replace with real data
-  const wishlistItems = [
-    { id: 1, name: 'Wireless Headphones', price: 99.99, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e' },
-    { id: 2, name: 'Smart Watch', price: 199.99, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30' }
-  ]
+  const [wishlist, setWishlist] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const loadWishlist = async () => {
+      try {
+        const data = await fetchWishlist()
+        setWishlist(data)
+      } catch (error) {
+        console.error('Failed to fetch wishlist:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    
+    loadWishlist()
+  }, [])
+
+  const handleRemove = async (productId) => {
+    try {
+      await removeFromWishlist(productId)
+      setWishlist(wishlist.filter(item => item.product.id !== productId))
+    } catch (error) {
+      console.error('Failed to remove from wishlist:', error)
+    }
+  }
 
   return (
-    <div>
-      <h2 className="text-xl font-bold text-gray-900 mb-6">Your Wishlist</h2>
+    <Box>
+      <Typography variant="h5" gutterBottom>
+        My Wishlist
+      </Typography>
       
-      {wishlistItems.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-600 mb-4">Your wishlist is empty</p>
-          <Link
-            to="/products"
-            className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Browse Products
-          </Link>
-        </div>
+      {isLoading ? (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>
+      ) : wishlist.length === 0 ? (
+        <Typography variant="body1" sx={{ mt: 3 }}>
+          Your wishlist is empty
+        </Typography>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {wishlistItems.map(item => (
-            <div key={item.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <Link to={`/products/${item.id}`} className="block">
-                <img 
-                  src={item.image} 
-                  alt={item.name} 
-                  className="w-full h-48 object-cover"
-                />
-              </Link>
-              <div className="p-4">
-                <h3 className="font-semibold text-lg mb-2">{item.name}</h3>
-                <div className="flex justify-between items-center">
-                  <span className="font-bold text-blue-600">${item.price.toFixed(2)}</span>
-                  <div className="flex space-x-2">
-                    <button className="p-2 text-red-500 hover:bg-red-50 rounded-full">
-                      <Heart className="w-5 h-5 fill-current" />
-                    </button>
-                    <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-full">
-                      <ShoppingCart className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <Grid container spacing={3} sx={{ mt: 2 }}>
+          {wishlist.map((item) => (
+            <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
+              <Box sx={{ position: 'relative' }}>
+                <ProductCard product={item.product} />
+                <IconButton
+                  sx={{ 
+                    position: 'absolute', 
+                    top: 8, 
+                    right: 8, 
+                    color: 'error.main',
+                    backgroundColor: 'background.paper'
+                  }}
+                  onClick={() => handleRemove(item.product.id)}
+                >
+                  <Delete />
+                </IconButton>
+              </Box>
+            </Grid>
           ))}
-        </div>
+        </Grid>
       )}
-    </div>
+    </Box>
   )
 }

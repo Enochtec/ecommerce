@@ -1,101 +1,108 @@
+import { useState, useEffect } from 'react'
+import { 
+  Typography, 
+  Box, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow, 
+  Paper,
+  Button,
+  CircularProgress
+} from '@mui/material'
 import { Link } from 'react-router-dom'
+import { fetchUserOrders } from '../../../services/orderService'
+import { format } from 'date-fns'
 
 export default function Orders() {
-  // Sample order data - replace with real data
-  const orders = [
-    {
-      id: 'ORD-12345',
-      date: '2023-05-15',
-      status: 'Delivered',
-      total: 149.99,
-      items: 3
-    },
-    {
-      id: 'ORD-12344',
-      date: '2023-04-28',
-      status: 'Delivered',
-      total: 89.99,
-      items: 2
+  const [orders, setOrders] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const loadOrders = async () => {
+      try {
+        const data = await fetchUserOrders()
+        setOrders(data)
+      } catch (error) {
+        console.error('Failed to fetch orders:', error)
+      } finally {
+        setIsLoading(false)
+      }
     }
-  ]
+    
+    loadOrders()
+  }, [])
 
   return (
-    <div>
-      <h2 className="text-xl font-bold text-gray-900 mb-6">Order History</h2>
+    <Box>
+      <Typography variant="h5" gutterBottom>
+        My Orders
+      </Typography>
       
-      {orders.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-600 mb-4">You haven't placed any orders yet</p>
-          <Link
-            to="/products"
-            className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Start Shopping
-          </Link>
-        </div>
+      {isLoading ? (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>
+      ) : orders.length === 0 ? (
+        <Typography variant="body1" sx={{ mt: 3 }}>
+          You haven't placed any orders yet.
+        </Typography>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Order #
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Total
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Items
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+        <TableContainer component={Paper} sx={{ mt: 3 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Order #</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Total</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {orders.map((order) => (
-                <tr key={order.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
-                    {order.id}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {order.date}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      order.status === 'Delivered' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
+                <TableRow key={order.id}>
+                  <TableCell>{order.id}</TableCell>
+                  <TableCell>
+                    {format(new Date(order.created_at), 'MMM dd, yyyy')}
+                  </TableCell>
+                  <TableCell>
+                    <Box 
+                      component="span" 
+                      sx={{
+                        px: 1,
+                        py: 0.5,
+                        borderRadius: 1,
+                        backgroundColor: 
+                          order.status === 'completed' ? 'success.light' :
+                          order.status === 'processing' ? 'info.light' :
+                          order.status === 'cancelled' ? 'error.light' : 'warning.light',
+                        color: 'common.white',
+                        fontSize: '0.75rem'
+                      }}
+                    >
                       {order.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    ${order.total.toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {order.items}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <Link
-                      to={`/account/orders/${order.id}`}
-                      className="text-blue-600 hover:text-blue-900"
+                    </Box>
+                  </TableCell>
+                  <TableCell>${order.total_amount.toFixed(2)}</TableCell>
+                  <TableCell>
+                    <Button 
+                      component={Link}
+                      to={`/my-account/orders/${order.id}`}
+                      variant="outlined"
+                      size="small"
                     >
                       View
-                    </Link>
-                  </td>
-                </tr>
+                    </Button>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
-    </div>
+    </Box>
   )
 }

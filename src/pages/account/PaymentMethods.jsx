@@ -1,362 +1,211 @@
-import { useState } from 'react'
-import { CreditCard, Plus, Trash2, Edit, Check, X } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { 
+  Typography, 
+  Box, 
+  List, 
+  ListItem, 
+  ListItemText, 
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  CircularProgress,
+  IconButton
+} from '@mui/material'
+import { Add, Edit, Delete, CreditCard } from '@mui/icons-material'
+import { fetchPaymentMethods, createPaymentMethod, deletePaymentMethod } from '../../../services/paymentService';
 
 export default function PaymentMethods() {
-  const [paymentMethods, setPaymentMethods] = useState([
-    {
-      id: 1,
-      type: 'Visa',
-      last4: '4242',
-      expiration: '12/25',
-      name: 'John Doe',
-      isDefault: true
-    },
-    {
-      id: 2,
-      type: 'Mastercard',
-      last4: '5555',
-      expiration: '06/24',
-      name: 'John Doe',
-      isDefault: false
-    }
-  ])
-
-  const [isEditing, setIsEditing] = useState(null)
-  const [editForm, setEditForm] = useState({})
-  const [showAddForm, setShowAddForm] = useState(false)
-  const [newPaymentMethod, setNewPaymentMethod] = useState({
-    type: 'Visa',
+  const [paymentMethods, setPaymentMethods] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [openDialog, setOpenDialog] = useState(false)
+  const [cardData, setCardData] = useState({
     number: '',
-    expiration: '',
-    name: '',
-    cvv: '',
-    isDefault: false
+    exp_month: '',
+    exp_year: '',
+    cvc: ''
   })
 
-  const handleEdit = (method) => {
-    setIsEditing(method.id)
-    setEditForm({ ...method })
-  }
-
-  const handleEditChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setEditForm(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }))
-  }
-
-  const saveEdit = () => {
-    setPaymentMethods(paymentMethods.map(pm => 
-      pm.id === isEditing ? { ...editForm } : 
-      editForm.isDefault ? { ...pm, isDefault: false } : pm
-    ))
-    setIsEditing(null)
-  }
-
-  const cancelEdit = () => {
-    setIsEditing(null)
-  }
-
-  const handleAddChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setNewPaymentMethod(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }))
-  }
-
-  const addPaymentMethod = () => {
-    // In a real app, you would validate and tokenize the card with a payment processor
-    const last4 = newPaymentMethod.number.slice(-4)
-    const newId = Math.max(...paymentMethods.map(pm => pm.id), 0) + 1
-    
-    setPaymentMethods([
-      ...paymentMethods.map(pm => newPaymentMethod.isDefault ? { ...pm, isDefault: false } : pm),
-      { 
-        id: newId,
-        type: newPaymentMethod.type,
-        last4,
-        expiration: newPaymentMethod.expiration,
-        name: newPaymentMethod.name,
-        isDefault: newPaymentMethod.isDefault
+  useEffect(() => {
+    const loadPaymentMethods = async () => {
+      try {
+        const data = await fetchPaymentMethods()
+        setPaymentMethods(data)
+      } catch (error) {
+        console.error('Failed to fetch payment methods:', error)
+      } finally {
+        setIsLoading(false)
       }
-    ])
+    }
     
-    setShowAddForm(false)
-    setNewPaymentMethod({
-      type: 'Visa',
+    loadPaymentMethods()
+  }, [])
+
+  const handleOpenDialog = () => {
+    setCardData({
       number: '',
-      expiration: '',
-      name: '',
-      cvv: '',
-      isDefault: false
+      exp_month: '',
+      exp_year: '',
+      cvc: ''
+    })
+    setOpenDialog(true)
+  }
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false)
+  }
+
+  const handleChange = (e) => {
+    setCardData({
+      ...cardData,
+      [e.target.name]: e.target.value
     })
   }
 
-  const deletePaymentMethod = (id) => {
-    if (paymentMethods.find(pm => pm.id === id)?.isDefault) {
-      alert('Cannot delete default payment method. Set another as default first.')
-      return
+  const handleSubmit = async () => {
+    setIsLoading(true)
+    try {
+      const newMethod = await createPaymentMethod(cardData)
+      setPaymentMethods([...paymentMethods, newMethod])
+      handleCloseDialog()
+    } catch (error) {
+      console.error('Failed to add payment method:', error)
+    } finally {
+      setIsLoading(false)
     }
-    setPaymentMethods(paymentMethods.filter(pm => pm.id !== id))
   }
 
-  const setDefault = (id) => {
-    setPaymentMethods(paymentMethods.map(pm => ({
-      ...pm,
-      isDefault: pm.id === id
-    })))
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this payment method?')) return
+    
+    setIsLoading(true)
+    try {
+      await deletePaymentMethod(id)
+      setPaymentMethods(paymentMethods.filter(method => method.id !== id))
+    } catch (error) {
+      console.error('Failed to delete payment method:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-gray-900">Payment Methods</h2>
-        <button
-          onClick={() => setShowAddForm(true)}
-          className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+    <Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h5" gutterBottom>
+          Payment Methods
+        </Typography>
+        <Button 
+          variant="contained" 
+          startIcon={<Add />}
+          onClick={handleOpenDialog}
         >
-          <Plus className="w-5 h-5 mr-1" />
           Add Payment Method
-        </button>
-      </div>
-
-      {/* Add New Payment Method Form */}
-      {showAddForm && (
-        <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Add Payment Method</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Card Type</label>
-              <select
-                name="type"
-                value={newPaymentMethod.type}
-                onChange={handleAddChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              >
-                <option>Visa</option>
-                <option>Mastercard</option>
-                <option>American Express</option>
-                <option>Discover</option>
-              </select>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
-              <input
-                type="text"
-                name="number"
-                value={newPaymentMethod.number}
-                onChange={handleAddChange}
-                placeholder="1234 5678 9012 3456"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Expiration (MM/YY)</label>
-                <input
-                  type="text"
-                  name="expiration"
-                  value={newPaymentMethod.expiration}
-                  onChange={handleAddChange}
-                  placeholder="12/25"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">CVV</label>
-                <input
-                  type="text"
-                  name="cvv"
-                  value={newPaymentMethod.cvv}
-                  onChange={handleAddChange}
-                  placeholder="123"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name on Card</label>
-              <input
-                type="text"
-                name="name"
-                value={newPaymentMethod.name}
-                onChange={handleAddChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              />
-            </div>
-            
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="defaultPayment"
-                name="isDefault"
-                checked={newPaymentMethod.isDefault}
-                onChange={handleAddChange}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label htmlFor="defaultPayment" className="ml-2 block text-sm text-gray-900">
-                Set as default payment method
-              </label>
-            </div>
-          </div>
-          <div className="mt-6 flex justify-end space-x-3">
-            <button
-              onClick={() => setShowAddForm(false)}
-              className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+        </Button>
+      </Box>
+      
+      {isLoading && paymentMethods.length === 0 ? (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>
+      ) : paymentMethods.length === 0 ? (
+        <Typography variant="body1" sx={{ mt: 3 }}>
+          You haven't saved any payment methods yet.
+        </Typography>
+      ) : (
+        <List>
+          {paymentMethods.map((method) => (
+            <ListItem 
+              key={method.id} 
+              sx={{ 
+                mb: 2, 
+                border: '1px solid', 
+                borderColor: 'divider',
+                borderRadius: 1,
+                position: 'relative'
+              }}
             >
-              Cancel
-            </button>
-            <button
-              onClick={addPaymentMethod}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
-              Save Payment Method
-            </button>
-          </div>
-        </div>
+              <CreditCard sx={{ mr: 2 }} />
+              <ListItemText
+                primary={`${method.brand} ending in •••• ${method.last4}`}
+                secondary={`Expires ${method.exp_month}/${method.exp_year}`}
+              />
+              <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
+                <IconButton
+                  color="error"
+                  onClick={() => handleDelete(method.id)}
+                  disabled={isLoading}
+                >
+                  <Delete />
+                </IconButton>
+              </Box>
+            </ListItem>
+          ))}
+        </List>
       )}
-
-      {/* Payment Methods List */}
-      <div className="space-y-4">
-        {paymentMethods.map(method => (
-          <div 
-            key={method.id} 
-            className={`bg-white p-6 rounded-lg shadow-sm border ${
-              method.isDefault ? 'border-blue-500' : 'border-transparent'
-            }`}
+      
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+        <DialogTitle>Add New Payment Method</DialogTitle>
+        <DialogContent>
+          <Box sx={{ mt: 2 }}>
+            <TextField
+              label="Card Number"
+              name="number"
+              fullWidth
+              margin="normal"
+              value={cardData.number}
+              onChange={handleChange}
+              placeholder="4242 4242 4242 4242"
+              required
+            />
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <TextField
+                label="Expiration Month"
+                name="exp_month"
+                fullWidth
+                margin="normal"
+                value={cardData.exp_month}
+                onChange={handleChange}
+                placeholder="MM"
+                required
+              />
+              <TextField
+                label="Expiration Year"
+                name="exp_year"
+                fullWidth
+                margin="normal"
+                value={cardData.exp_year}
+                onChange={handleChange}
+                placeholder="YYYY"
+                required
+              />
+              <TextField
+                label="CVC"
+                name="cvc"
+                fullWidth
+                margin="normal"
+                value={cardData.cvc}
+                onChange={handleChange}
+                placeholder="123"
+                required
+              />
+            </Box>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button 
+            onClick={handleSubmit} 
+            variant="contained"
+            disabled={isLoading}
+            startIcon={isLoading ? <CircularProgress size={20} /> : null}
           >
-            <div className="flex justify-between items-start">
-              <div className="flex items-center">
-                <CreditCard className={`h-5 w-5 ${
-                  method.isDefault ? 'text-blue-600' : 'text-gray-400'
-                }`} />
-                <div className="ml-3">
-                  <h3 className="font-medium">
-                    {method.type} ending in {method.last4}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Expires {method.expiration} • {method.name}
-                  </p>
-                  {method.isDefault && (
-                    <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded">
-                      Default
-                    </span>
-                  )}
-                </div>
-              </div>
-              
-              {isEditing === method.id ? (
-                <div className="flex space-x-2">
-                  <button 
-                    onClick={saveEdit}
-                    className="text-green-600 hover:text-green-800"
-                  >
-                    <Check className="h-5 w-5" />
-                  </button>
-                  <button 
-                    onClick={cancelEdit}
-                    className="text-red-600 hover:text-red-800"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
-              ) : (
-                <div className="flex space-x-2">
-                  <button 
-                    onClick={() => handleEdit(method)}
-                    className="text-blue-600 hover:text-blue-800"
-                  >
-                    <Edit className="h-5 w-5" />
-                  </button>
-                  <button 
-                    onClick={() => deletePaymentMethod(method.id)}
-                    className="text-red-600 hover:text-red-800"
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {isEditing === method.id && (
-              <div className="mt-4 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Card Type</label>
-                  <select
-                    name="type"
-                    value={editForm.type}
-                    onChange={handleEditChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  >
-                    <option>Visa</option>
-                    <option>Mastercard</option>
-                    <option>American Express</option>
-                    <option>Discover</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name on Card</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={editForm.name}
-                    onChange={handleEditChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Expiration Date</label>
-                  <input
-                    type="text"
-                    name="expiration"
-                    value={editForm.expiration}
-                    onChange={handleEditChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id={`default-${method.id}`}
-                    name="isDefault"
-                    checked={editForm.isDefault}
-                    onChange={handleEditChange}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  />
-                  <label htmlFor={`default-${method.id}`} className="ml-2 block text-sm text-gray-900">
-                    Default payment method
-                  </label>
-                </div>
-              </div>
-            )}
-
-            {!method.isDefault && isEditing !== method.id && (
-              <button
-                onClick={() => setDefault(method.id)}
-                className="mt-4 text-sm text-blue-600 hover:text-blue-800"
-              >
-                Set as default
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Security Notice */}
-      <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-        <h3 className="text-sm font-medium text-blue-800">Security Notice</h3>
-        <p className="mt-1 text-sm text-blue-700">
-          Your payment information is securely stored and encrypted. We never store your full card number or CVV.
-        </p>
-      </div>
-    </div>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   )
 }

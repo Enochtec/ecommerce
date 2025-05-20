@@ -1,52 +1,50 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Button } from '@mui/material'
+import { useCart } from '../hooks/useCart'
+import { toast } from 'react-toastify'
 
-export default function ProductCard({ product, onAddToCart }) {
-  const [isHovered, setIsHovered] = useState(false)
+export default function ProductCard({ product }) {
+  const { addToCart } = useCart()
+
+  const handleAddToCart = async () => {
+    try {
+      await addToCart(product.id, 1)
+      toast.success('Product added to cart!')
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
 
   return (
-    <div 
-      className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <Link to={`/products/${product.id}`} className="block">
-        <div className="relative overflow-hidden h-60">
-          <img 
-            src={product.image} 
-            alt={product.name} 
-            className={`w-full h-full object-cover transition-transform duration-500 ${isHovered ? 'scale-110' : 'scale-100'}`}
-          />
-          {product.isNew && (
-            <span className="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-              New
-            </span>
-          )}
-        </div>
+    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+      <Link to={`/products/${product.id}`}>
+        <img 
+          src={product.image_url || '/placeholder-product.jpg'} 
+          alt={product.name}
+          className="w-full h-48 object-cover"
+        />
       </Link>
       
-      <div className="p-5">
-        <div className="flex justify-between items-start mb-2">
-          <Link to={`/products/${product.id}`} className="hover:text-blue-600 transition-colors">
-            <h3 className="font-semibold text-lg text-gray-800">{product.name}</h3>
-          </Link>
-          <span className="font-bold text-blue-600">${product.price.toFixed(2)}</span>
-        </div>
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
-        <div className="flex justify-between items-center">
-          <span className="text-xs text-gray-500 capitalize">{product.category}</span>
-          <button 
-            onClick={(e) => {
-              e.preventDefault()
-              onAddToCart(product)
-            }}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center"
+      <div className="p-4">
+        <Link to={`/products/${product.id}`} className="block">
+          <h3 className="text-lg font-semibold text-gray-800 mb-1 hover:text-indigo-600">
+            {product.name}
+          </h3>
+        </Link>
+        
+        <div className="flex justify-between items-center mt-2">
+          <span className="text-lg font-bold text-indigo-600">
+            ${product.price.toFixed(2)}
+          </span>
+          
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            onClick={handleAddToCart}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            Add
-          </button>
+            Add to Cart
+          </Button>
         </div>
       </div>
     </div>

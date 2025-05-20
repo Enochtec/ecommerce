@@ -1,51 +1,66 @@
 import { useState } from 'react'
+import { 
+  Box,
+  Typography,
+  IconButton,
+  TextField,
+  Divider
+} from '@mui/material'
+import { Delete } from '@mui/icons-material'
 
-export default function CartItem({ item, removeFromCart, updateQuantity }) {
+export default function CartItem({ item, onQuantityChange, onRemove }) {
   const [quantity, setQuantity] = useState(item.quantity)
 
-  const handleQuantityChange = (e) => {
-    const newQuantity = parseInt(e.target.value)
-    setQuantity(newQuantity)
-    updateQuantity(item.id, newQuantity)
+  const handleQuantityChange = (newQuantity) => {
+    const qty = Math.max(1, Math.min(99, newQuantity))
+    setQuantity(qty)
+    onQuantityChange(item.id, qty)
   }
 
   return (
-    <div className="py-4 flex flex-col sm:flex-row gap-4">
-      <div className="flex-shrink-0">
-        <img 
-          src={item.image} 
-          alt={item.name} 
-          className="w-20 h-20 object-cover rounded"
-        />
-      </div>
-      
-      <div className="flex-grow">
-        <div className="flex justify-between">
-          <h3 className="font-medium text-gray-800">{item.name}</h3>
-          <span className="font-bold text-blue-600">${item.price.toFixed(2)}</span>
-        </div>
+    <Box>
+      <Box sx={{ display: 'flex', gap: 2 }}>
+        <Box sx={{ width: 80, height: 80 }}>
+          <img 
+            src={item.product.image_url || '/placeholder-product.jpg'} 
+            alt={item.product.name}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        </Box>
         
-        <div className="flex items-center mt-2">
-          <label htmlFor={`quantity-${item.id}`} className="mr-2 text-sm text-gray-600">Qty:</label>
-          <select
-            id={`quantity-${item.id}`}
-            value={quantity}
-            onChange={handleQuantityChange}
-            className="border border-gray-300 rounded px-2 py-1 text-sm"
-          >
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
-              <option key={num} value={num}>{num}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-      
-      <button 
-        onClick={() => removeFromCart(item.id)}
-        className="text-red-500 hover:text-red-700 self-start sm:self-center"
-      >
-        Remove
-      </button>
-    </div>
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 'medium' }}>
+            {item.product.name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            ${item.price.toFixed(2)}
+          </Typography>
+          
+          <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+            <TextField
+              size="small"
+              type="number"
+              value={quantity}
+              onChange={(e) => handleQuantityChange(parseInt(e.target.value))}
+              inputProps={{ min: 1, max: 99 }}
+              sx={{ width: 80, mr: 2 }}
+            />
+            
+            <Typography variant="body1" sx={{ flex: 1, textAlign: 'right' }}>
+              ${(item.price * quantity).toFixed(2)}
+            </Typography>
+            
+            <IconButton 
+              onClick={() => onRemove(item.id)}
+              color="error"
+              size="small"
+            >
+              <Delete />
+            </IconButton>
+          </Box>
+        </Box>
+      </Box>
+      <Divider sx={{ my: 2 }} />
+    </Box>
   )
 }
